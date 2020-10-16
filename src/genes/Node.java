@@ -4,10 +4,20 @@ import java.util.ArrayList;
 
 public class Node implements Comparable<Node> {
 
-    public enum Type {
+    public enum Type {                      // type of node
         INPUT,
         OUTPUT,
         HIDDEN
+    }
+
+    public enum ActivationFunction {        // activation function of node, can be evolved
+        SIGMOIS,
+        STEP,
+        SIN,
+        COS,
+        TAN,
+        SQR,
+        SQRT
     }
 
     public float x;                             // for correct data feed forward order
@@ -41,14 +51,14 @@ public class Node implements Comparable<Node> {
         }
     }
 
-    public void calculate() {
+    public void feedForward() {
         outputSum = activationFunction(inputSum);
         inputSum = 0;
 
         if (type != Type.OUTPUT) {
             for (Connection c : connections) {
                 if (c.enabled) {
-                    c.nodeTo.inputSum += outputSum;
+                    c.nodeTo.inputSum += outputSum * c.weight;
                 }
             }
         }

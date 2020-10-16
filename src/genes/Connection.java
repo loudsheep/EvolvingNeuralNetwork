@@ -7,15 +7,15 @@ public class Connection {
     public Node nodeFrom;
     public Node nodeTo;
 
-    public Connection(Node nodeTo, Node nodeFrom, float weight, boolean enabled) {
+    public Connection(Node nodeFrom, Node nodeTo, float weight, boolean enabled) {
         this.nodeTo = nodeTo;
         this.nodeFrom = nodeFrom;
         this.weight = weight;
         this.enabled = enabled;
     }
 
-    public Connection(Node nodeTo, Node nodeFrom) {
-        this(nodeTo, nodeFrom, 1f, true);
+    public Connection(Node nodeFrom, Node nodeTo) {
+        this(nodeFrom, nodeTo, (float) Math.random() * 2 - 1, true);
     }
 
 }
