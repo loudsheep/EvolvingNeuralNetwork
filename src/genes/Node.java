@@ -61,24 +61,24 @@ public class Node implements Comparable<Node> {
     public ActivationFunction function;         // activation function of node
     public float inputSum;                      // used to calculate brain output
     public float outputSum;                     // used to calculate brain output
-    public float dopamine;                      // level of node growth/ evolution
+    public float dopamine;                      // level of node growth/evolution
     public ArrayList<Connection> connections;   // connections going out of this node
 
-    public Node(Type type, float x, float y) {
+    public Node(Type type, ActivationFunction function, float x, float y) {
         this.type = type;
         this.x = x;
         this.y = y;
+
+        this.function = function;
 
         inputSum = 0;
         outputSum = 0;
 
         connections = new ArrayList<>();
-
-        function = ActivationFunction.SIGMOID;
     }
 
     public Node(Type type, float x) {
-        this(type, x, 0.5f);
+        this(type, ActivationFunction.SIGMOID, x, 0.5f);
     }
 
     public void setConnections(ArrayList<Connection> connections) {
@@ -100,12 +100,6 @@ public class Node implements Comparable<Node> {
         }
 
     }
-
-//    public float activationFunction(float x) {
-//        //return (float) (1 / (1 + Math.exp(-x)));
-////        return getClass().getMethod(function.toString().toLowerCase(), x.class);
-//        return function.function(x);
-//    }
 
     @Override
     public Node clone() {       // used to clone object, do not implement until class is finished
