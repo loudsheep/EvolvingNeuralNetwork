@@ -11,18 +11,54 @@ public class Node implements Comparable<Node> {
     }
 
     public enum ActivationFunction {        // activation function of node, can be evolved
-        SIGMOIS,
-        STEP,
-        SIN,
-        COS,
-        TAN,
-        SQR,
-        SQRT
+        SIGMOID {
+            public float function(float x) {
+                return (float) (1 / (1 + Math.exp(-x)));
+            }
+        },
+        STEP {
+            public float function(float x) {
+                return x <= 0 ? 0 : 1;
+            }
+        },
+        SIN {
+            public float function(float x) {
+                return (float) Math.sin(x);
+            }
+        },
+        COS {
+            public float function(float x) {
+                return (float) Math.cos(x);
+            }
+        },
+        TAN {
+            public float function(float x) {
+                return (float) Math.tan(x);
+            }
+        },
+        TANH {
+            public float function(float x) {
+                return (float) Math.tanh(x);
+            }
+        },
+        SQR {
+            public float function(float x) {
+                return x * x;
+            }
+        },
+        SQRT {
+            public float function(float x) {
+                return (float) Math.sqrt(x);
+            }
+        };
+
+        public abstract float function(float x);
     }
 
     public float x;                             // for correct data feed forward order
     public float y;                             // not used util some visualization program
     public Type type;                           // type of node/neuron
+    public ActivationFunction function;         // activation function of node
     public float inputSum;                      // used to calculate brain output
     public float outputSum;                     // used to calculate brain output
     public float dopamine;                      // level of node growth/ evolution
@@ -37,6 +73,8 @@ public class Node implements Comparable<Node> {
         outputSum = 0;
 
         connections = new ArrayList<>();
+
+        function = ActivationFunction.SIGMOID;
     }
 
     public Node(Type type, float x) {
@@ -52,21 +90,22 @@ public class Node implements Comparable<Node> {
     }
 
     public void feedForward() {
-        outputSum = activationFunction(inputSum);
+        outputSum = function.function(inputSum);
         inputSum = 0;
 
-        if (type != Type.OUTPUT) {
-            for (Connection c : connections) {
-                if (c.enabled) {
-                    c.nodeTo.inputSum += outputSum * c.weight;
-                }
+        for (Connection c : connections) {
+            if (c.enabled) {
+                c.nodeTo.inputSum += outputSum * c.weight;
             }
         }
+
     }
 
-    public float activationFunction(float x) {
-        return (float) (1 / (1 + Math.exp(-x)));
-    }
+//    public float activationFunction(float x) {
+//        //return (float) (1 / (1 + Math.exp(-x)));
+////        return getClass().getMethod(function.toString().toLowerCase(), x.class);
+//        return function.function(x);
+//    }
 
     @Override
     public Node clone() {       // used to clone object, do not implement until class is finished
